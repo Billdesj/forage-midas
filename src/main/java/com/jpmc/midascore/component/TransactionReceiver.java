@@ -7,8 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransactionReceiver {
 
+    private final TransactionHandler transactionHandler;
+
+    public TransactionReceiver(TransactionHandler transactionHandler) {
+        this.transactionHandler = transactionHandler;
+    }
+
     @KafkaListener(topics = "${general.kafka-topic}")
     public void receive(Transaction transaction) {
-        float amount = transaction.getAmount();
+        transactionHandler.handleTransaction(transaction);
     }
 }
